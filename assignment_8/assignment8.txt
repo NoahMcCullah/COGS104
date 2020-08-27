@@ -1,0 +1,35 @@
+clear;
+pause('on');
+
+n = 50;
+GRID = zeros(n,n);
+for l = 1:n
+    for m = 1:n
+        r = rand(1);
+        if(r < 0.6)
+            GRID(l,m) = 1;
+        end
+    end
+end
+
+up = [2:n, 1];
+down = [n, 1:(n-1)];
+
+%Make the colormap gray, with a range of 2.
+c = gray(2);
+colormap(c);
+
+for i = 1:1000
+    
+    neighbors(:,:) = GRID(down,up) + GRID(:,up) + GRID(up,up) + GRID(down,:) + GRID(up,:) + GRID(down,down) + GRID(:,down) + GRID(up,down);
+    
+    GRID = neighbors == 3 | (GRID == 1 & neighbors == 2);
+    %live cells live with n = 2 | 3
+    %dead cells live with n = 3
+    %all other cells die or stay dead
+    
+    image(GRID*2);
+    pause(0.05);
+end
+
+
